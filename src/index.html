@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>USATT Head-to-Head Search</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container-fluid">
+        <header class="bg-primary text-white text-center py-4 mb-4">
+            <h1><i class="fas fa-people-arrows"></i> USATT Head-to-Head Search</h1>
+            <p class="lead">Compare match records between two USATT players</p>
+        </header>
+
+        <main class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h3 class="card-title">Search Head-to-Head Records</h3>
+                            <form id="searchForm">
+                                <div class="mb-3">
+                                    <label for="player1" class="form-label">Player 1 Name</label>
+                                    <input type="text" class="form-control" id="player1" placeholder="Enter first player name" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="player2" class="form-label">Player 2 Name</label>
+                                    <input type="text" class="form-control" id="player2" placeholder="Enter second player name" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Search Head-to-Head</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div id="resultsSection" class="card d-none">
+                        <div class="card-body">
+                            <h3 class="card-title">Match Results</h3>
+                            <div id="matchStats" class="mb-4">
+                                <h4>Match Statistics</h4>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="player-card bg-light p-3 rounded mb-2">
+                                            <h5><span id="player1Name"></span></h5>
+                                            <p>Wins: <span id="player1Wins">0</span></p>
+                                            <p>Losses: <span id="player1Losses">0</span></p>
+                                            <p>Total Matches: <span id="player1Total">0</span></p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="player-card bg-light p-3 rounded mb-2">
+                                            <h5><span id="player2Name"></span></h5>
+                                            <p>Wins: <span id="player2Wins">0</span></p>
+                                            <p>Losses: <span id="player2Losses">0</span></p>
+                                            <p>Total Matches: <span id="player2Total">0</span></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="tournamentHistory">
+                                <h4>Tournament History</h4>
+                                <div id="tournamentsContainer" class="list-group">
+                                    <!-- Tournament items will be added here dynamically -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="bg-dark text-white text-center py-3 mt-4">
+            <p>&copy; 2026 USATT Head-to-Head Search</p>
+        </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

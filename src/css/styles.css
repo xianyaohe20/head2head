@@ -1,0 +1,66 @@
+/* Custom styles for the USATT Head-to-Head Search application */
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8f9fa;
+}
+
+header {
+    box-shadow: 0 2px 4px rgba(0,0,0,.1);
+}
+
+.card {
+    box-shadow: 0 4px 6px rgba(0,0,0,.1);
+    border: none;
+}
+
+.player-card {
+    border-left: 4px solid #0d6efd;
+}
+
+.player-card h5 {
+    margin-bottom: 1rem;
+    color: #0d6efd;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .player-card {
+        margin-bottom: 1rem;
+    }
+}
+
+/* Tournament history styling */
+.tournament-item {
+    border-bottom: 1px solid #dee2e6;
+}
+
+.tournament-item:last-child {
+    border-bottom: none;
+}
+
+.tournament-date {
+    font-weight: bold;
+    color: #6c757d;
+}
+
+/* Form styling */
+.form-control:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+/* Button styling */
+.btn-primary {
+    background-color: #0d6efd;
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #0b5ed7;
+}
+
+/* Footer styling */
+footer {
+    margin-top: 40px;
+}
