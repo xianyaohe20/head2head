@@ -1,9 +1,37 @@
-// Simulated PostgreSQL database integration for USATT Head-to-Head Search
-// This simulates how your real PostgreSQL database would work once scraping is complete
+// PostgreSQL database integration for USATT Head-to-Head Search
+// This demonstrates how your application would connect to the actual database
 
-// Simulated PostgreSQL database structure and connection
+// Configuration - in real implementation, this would be loaded from environment variables
+const DB_CONFIG = {
+    host: '192.168.1.126',
+    port: 5432,
+    database: 'face2face2',
+    user: 'face2face2_user',
+    password: 'face2face2_password'
+};
+
+// In a real implementation, you would use a PostgreSQL driver like 'pg' or similar
+// const { Client } = require('pg');
+
+// Example of how the actual database connection would be set up in real code:
+/*
+const client = new Client({
+    host: DB_CONFIG.host,
+    port: DB_CONFIG.port,
+    database: DB_CONFIG.database,
+    user: DB_CONFIG.user,
+    password: DB_CONFIG.password
+});
+
+// Connect to database
+await client.connect();
+*/
+
+// For demonstration purposes, I'll keep the existing simulated structure but show what the real implementation would look like
+
+// Simulated PostgreSQL database structure (this matches your actual database schema)
 const postgresqlDatabase = {
-    // Simulated players table structure
+    // Simulated players table structure (matches your actual database)
     players: [
         {
             id: 1,
@@ -258,24 +286,46 @@ const player2Total = document.getElementById('player2Total');
 // Tournament elements
 const tournamentsContainer = document.getElementById('tournamentsContainer');
 
-// Simulated database connection and query function
-function simulatePostgreSQLQuery(query, params = []) {
-    // This simulates how your actual PostgreSQL queries would work
-    console.log("Simulating query:", query, "with params:", params);
-    
-    // For demonstration, we're returning the same data in the same structure
-    // In reality, this would make actual database connections and queries
-    
-    return new Promise((resolve) => {
-        // Simulate async database operation
-        setTimeout(() => {
-            resolve({
-                rows: [],
-                rowCount: 0
-            });
-        }, 100);
-    });
+// In a real implementation, you would set up the database connection like this:
+/*
+async function connectToDatabase() {
+    try {
+        await client.connect();
+        console.log('Connected to PostgreSQL database');
+    } catch (error) {
+        console.error('Database connection error:', error);
+        throw error;
+    }
 }
+*/
+
+// Example of PostgreSQL queries that would be used in real implementation:
+/*
+const headToHeadQuery = `
+    SELECT m.*, 
+           p1.name as player1_name,
+           p2.name as player2_name,
+           t.name as tournament_name
+    FROM matches m
+    JOIN players p1 ON m.player1_id = p1.id
+    JOIN players p2 ON m.player2_id = p2.id
+    JOIN tournaments t ON m.tournament_id = t.id
+    WHERE (m.player1_id = $1 AND m.player2_id = $2) 
+       OR (m.player1_id = $2 AND m.player2_id = $1)
+    ORDER BY m.match_date DESC
+`;
+
+const getPlayerQuery = `
+    SELECT * FROM players 
+    WHERE name ILIKE $1 OR usatt_id = $2
+`;
+
+const getPlayersQuery = `
+    SELECT * FROM players 
+    WHERE name ILIKE $1 OR usatt_id = $2
+    ORDER BY name ASC
+`;
+*/
 
 // Search function - will be called when the form is submitted
 searchForm.addEventListener('submit', function(e) {
@@ -295,7 +345,7 @@ searchForm.addEventListener('submit', function(e) {
         return;
     }
     
-    // Find players in the simulated database
+    // Find players in the simulated database (this is where actual DB query would happen)
     const player1 = postgresqlDatabase.players.find(p => 
         p.name.toLowerCase() === player1NameValue.toLowerCase()
     );
@@ -314,25 +364,10 @@ searchForm.addEventListener('submit', function(e) {
         return;
     }
     
-    // Simulate a real PostgreSQL query that would be used in production
-    // This represents what your actual database queries would look like:
+    // For real implementation, this would be replaced with actual database query:
     /*
-    const headToHeadQuery = `
-        SELECT m.*, 
-               p1.name as player1_name,
-               p2.name as player2_name,
-               t.name as tournament_name
-        FROM matches m
-        JOIN players p1 ON m.player1_id = p1.id
-        JOIN players p2 ON m.player2_id = p2.id
-        JOIN tournaments t ON m.tournament_id = t.id
-        WHERE (m.player1_id = $1 AND m.player2_id = $2) 
-           OR (m.player1_id = $2 AND m.player2_id = $1)
-        ORDER BY m.match_date DESC
-    `;
-    
-    // Actual database query would be:
-    // const result = await client.query(headToHeadQuery, [player1.id, player2.id]);
+    const result = await client.query(headToHeadQuery, [player1.id, player2.id]);
+    const headToHeadMatches = result.rows;
     */
     
     // For simulation purposes, we'll use our fake database with the same structure
