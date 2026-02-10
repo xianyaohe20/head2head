@@ -1,14 +1,8 @@
 // PostgreSQL database integration for USATT Head-to-Head Search
-// This implements actual database connection to your PostgreSQL database with correct schema
+// This implements actual API calls to your backend service
 
-// Database configuration - in production, use environment variables
-const DB_CONFIG = {
-    host: '192.168.1.126',
-    port: 5432,
-    database: 'face2face2',
-    user: 'face2face2_user',
-    password: 'face2face2_password'
-};
+// Backend server URL - update this if your backend runs on a different host/port
+const API_BASE_URL = 'http://localhost:3000/api';
 
 // DOM Elements
 const searchForm = document.getElementById('searchForm');
@@ -31,71 +25,18 @@ const player2Total = document.getElementById('player2Total');
 // Tournament elements
 const tournamentsContainer = document.getElementById('tournamentsContainer');
 
-// Function to connect to the database (this would be handled by backend in production)
-async function connectToDatabase() {
-    // For browser applications, database connections should be handled by a backend server
-    console.log('Database configuration ready - in production, this would connect to your PostgreSQL server');
-    // In actual implementation, you would use a backend service to handle database connections
-    return true;
-}
-
-// Function to search for head-to-head matches in database using your exact schema
-async function searchHeadToHead(player1Name, player2Name) {
-    // Query to get head-to-head matches using your actual database schema
-    const query = `
-        SELECT m.*, 
-               p1.name as player1_name,
-               p2.name as player2_name,
-               t.name as tournament_name,
-               t.start_date as tournament_start_date
-        FROM match m
-        JOIN player p1 ON m.player1_id = p1.id
-        JOIN player p2 ON m.player2_id = p2.id
-        JOIN tournament t ON m.tournament_id = t.id
-        WHERE (p1.name ILIKE $1 AND p2.name ILIKE $2) 
-           OR (p1.name ILIKE $2 AND p2.name ILIKE $1)
-        ORDER BY t.start_date DESC
-    `;
-    
+// Function to make API calls to backend server
+async function makeApiCall(endpoint, options = {}) {
     try {
-        // In production, this would be replaced with actual database query:
-        // const result = await client.query(query, [player1Name, player2Name]);
-        // return result.rows;
+        const response = await fetch(`${API_BASE_URL}${endpoint}`, options);
         
-        // For demonstration purposes only - actual implementation would use real DB connection
-        console.log('Query would execute:', query);
-        console.log('Parameters would be:', [player1Name, player2Name]);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
         
-        // This is where you'd make the actual database call in a backend service
-        return [];
+        return await response.json();
     } catch (error) {
-        console.error('Database query error:', error);
-        throw error;
-    }
-}
-
-// Function to get player by name from database using your exact schema
-async function getPlayerByName(name) {
-    const query = `
-        SELECT * FROM player 
-        WHERE name ILIKE $1
-        ORDER BY name ASC
-        LIMIT 1
-    `;
-    
-    try {
-        // In production, this would be replaced with actual database query:
-        // const result = await client.query(query, [name]);
-        // return result.rows[0];
-        
-        // For demonstration purposes only - actual implementation would use real DB connection
-        console.log('Query would execute:', query);
-        console.log('Parameters would be:', [name]);
-        
-        // This is where you'd make the actual database call in a backend service
-        return null;
-    } catch (error) {
-        console.error('Database query error:', error);
+        console.error('API call error:', error);
         throw error;
     }
 }
@@ -118,66 +59,36 @@ searchForm.addEventListener('submit', async function(e) {
         return;
     }
     
-    // Connect to database (for demonstration - actual implementation uses backend)
-    const connected = await connectToDatabase();
-    if (!connected) {
-        alert('Failed to connect to database');
-        return;
-    }
-    
-    // Find players in the actual database
-    let player1, player2;
     try {
-        // In real implementation, these would be actual database queries:
-        // player1 = await getPlayerByName(player1NameValue);
-        // player2 = await getPlayerByName(player2NameValue);
+        // Get head-to-head matches from the backend API
+        const headToHeadMatches = await makeApiCall(
+            `/headtohead/${encodeURIComponent(player1NameValue)}/${encodeURIComponent(player2NameValue)}`
+        );
         
-        // For demonstration, we'll simulate the database responses
-        player1 = {
+        // For demonstration purposes, we'll simulate getting player data
+        // In real implementation, you'd get this from the database too
+        
+        // For now, we'll use mock player data since the API would handle this
+        const player1 = {
             id: 1,
             name: player1NameValue,
             usatt_id: "USATT12345",
             omnipong_pid: "OP12345"
         };
         
-        player2 = {
+        const player2 = {
             id: 2,
             name: player2NameValue,
             usatt_id: "USATT67890",
             omnipong_pid: "OP67890"
         };
-    } catch (error) {
-        alert('Error searching for players in database');
-        console.error('Player search error:', error);
-        return;
-    }
-    
-    if (!player1) {
-        alert(`Player "${player1NameValue}" not found in database`);
-        return;
-    }
-    
-    if (!player2) {
-        alert(`Player "${player2NameValue}" not found in database`);
-        return;
-    }
-    
-    // Get head-to-head matches from the actual database
-    let headToHeadMatches;
-    try {
-        // In real implementation, this would be an actual database query:
-        // headToHeadMatches = await searchHeadToHead(player1NameValue, player2NameValue);
         
-        // For demonstration purposes - this would come from your actual database
-        headToHeadMatches = [];
+        // Display results
+        displayResults(player1, player2, headToHeadMatches);
     } catch (error) {
-        alert('Error retrieving match data from database');
-        console.error('Match query error:', error);
-        return;
+        alert('Error retrieving data from server');
+        console.error('Search error:', error);
     }
-    
-    // Display results
-    displayResults(player1, player2, headToHeadMatches);
 });
 
 // Function to calculate statistics and display results
@@ -267,7 +178,7 @@ function displayTournaments(matches) {
     });
 }
 
-// Initialize with sample data for demonstration (this would be removed in real implementation)
+// Initialize with sample data for demonstration
 window.addEventListener('DOMContentLoaded', function() {
     // Set up sample search for demonstration purposes (would be removed in production)
     player1Input.value = "John Smith";
