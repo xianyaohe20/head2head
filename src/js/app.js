@@ -31,17 +31,15 @@ const player2Total = document.getElementById('player2Total');
 // Tournament elements
 const tournamentsContainer = document.getElementById('tournamentsContainer');
 
-// Function to connect to the database (for demonstration purposes)
-// In actual implementation, you'd use a backend service
+// Function to connect to the database (this would be handled by backend in production)
 async function connectToDatabase() {
-    // For browser-based applications, this would typically be handled by
-    // a backend server that manages the database connections
-    
+    // For browser applications, database connections should be handled by a backend server
     console.log('Database configuration ready - in production, this would connect to your PostgreSQL server');
-    return true; // For demonstration
+    // In actual implementation, you would use a backend service to handle database connections
+    return true;
 }
 
-// Function to search for head-to-head matches in database using correct schema
+// Function to search for head-to-head matches in database using your exact schema
 async function searchHeadToHead(player1Name, player2Name) {
     // Query to get head-to-head matches using your actual database schema
     const query = `
@@ -56,54 +54,27 @@ async function searchHeadToHead(player1Name, player2Name) {
         JOIN tournament t ON m.tournament_id = t.id
         WHERE (p1.name ILIKE $1 AND p2.name ILIKE $2) 
            OR (p1.name ILIKE $2 AND p2.name ILIKE $1)
-        ORDER BY m.tournament_id DESC, t.start_date DESC
+        ORDER BY t.start_date DESC
     `;
     
     try {
-        // In actual implementation, this would be replaced with real database connection
-        console.log('Executing query:', query);
-        console.log('Parameters:', [player1Name, player2Name]);
+        // In production, this would be replaced with actual database query:
+        // const result = await client.query(query, [player1Name, player2Name]);
+        // return result.rows;
         
-        // Simulate database result for demonstration
-        return [
-            {
-                id: 1,
-                player1_id: 1,
-                player2_id: 2,
-                tournament_id: 101,
-                event_id: 5,
-                player1_win: true,
-                match_result_concise: "-7, 8, 9, 9",
-                player1_rating: 2100,
-                player2_rating: 1950,
-                player1_name: "John Smith",
-                player2_name: "Sarah Johnson",
-                tournament_name: "Chicago Open",
-                tournament_start_date: "2023-05-15"
-            },
-            {
-                id: 2,
-                player1_id: 1,
-                player2_id: 2,
-                tournament_id: 102,
-                event_id: 6,
-                player1_win: false,
-                match_result_concise: "11, 7, 11, 8",
-                player1_rating: 2100,
-                player2_rating: 1950,
-                player1_name: "John Smith",
-                player2_name: "Sarah Johnson",
-                tournament_name: "Midwest Championships",
-                tournament_start_date: "2023-07-22"
-            }
-        ];
+        // For demonstration purposes only - actual implementation would use real DB connection
+        console.log('Query would execute:', query);
+        console.log('Parameters would be:', [player1Name, player2Name]);
+        
+        // This is where you'd make the actual database call in a backend service
+        return [];
     } catch (error) {
         console.error('Database query error:', error);
         throw error;
     }
 }
 
-// Function to get player by name from database using correct schema
+// Function to get player by name from database using your exact schema
 async function getPlayerByName(name) {
     const query = `
         SELECT * FROM player 
@@ -113,22 +84,16 @@ async function getPlayerByName(name) {
     `;
     
     try {
-        // In actual implementation, this would be replaced with real database connection
-        console.log('Executing query:', query);
-        console.log('Parameters:', [name]);
+        // In production, this would be replaced with actual database query:
+        // const result = await client.query(query, [name]);
+        // return result.rows[0];
         
-        // Simulate database result for demonstration
-        return {
-            id: 1,
-            name: "John Smith",
-            usatt_id: "USATT12345",
-            omnipong_pid: "OP12345",
-            birth_date: "1985-06-15",
-            club: "Chicago Table Tennis Club",
-            contact: "john.smith@email.com",
-            address: "123 Main St, Chicago, IL",
-            gender: "M"
-        };
+        // For demonstration purposes only - actual implementation would use real DB connection
+        console.log('Query would execute:', query);
+        console.log('Parameters would be:', [name]);
+        
+        // This is where you'd make the actual database call in a backend service
+        return null;
     } catch (error) {
         console.error('Database query error:', error);
         throw error;
@@ -153,7 +118,7 @@ searchForm.addEventListener('submit', async function(e) {
         return;
     }
     
-    // Connect to database (for demonstration)
+    // Connect to database (for demonstration - actual implementation uses backend)
     const connected = await connectToDatabase();
     if (!connected) {
         alert('Failed to connect to database');
@@ -167,29 +132,19 @@ searchForm.addEventListener('submit', async function(e) {
         // player1 = await getPlayerByName(player1NameValue);
         // player2 = await getPlayerByName(player2NameValue);
         
-        // For demonstration, we're using mock data that matches the schema
+        // For demonstration, we'll simulate the database responses
         player1 = {
             id: 1,
             name: player1NameValue,
             usatt_id: "USATT12345",
-            omnipong_pid: "OP12345",
-            birth_date: "1985-06-15",
-            club: "Chicago Table Tennis Club",
-            contact: "john.smith@email.com",
-            address: "123 Main St, Chicago, IL",
-            gender: "M"
+            omnipong_pid: "OP12345"
         };
         
         player2 = {
             id: 2,
             name: player2NameValue,
             usatt_id: "USATT67890",
-            omnipong_pid: "OP67890",
-            birth_date: "1990-03-22",
-            club: "New York Table Tennis Association",
-            contact: "sarah.johnson@email.com",
-            address: "456 Park Ave, New York, NY",
-            gender: "F"
+            omnipong_pid: "OP67890"
         };
     } catch (error) {
         alert('Error searching for players in database');
@@ -213,54 +168,8 @@ searchForm.addEventListener('submit', async function(e) {
         // In real implementation, this would be an actual database query:
         // headToHeadMatches = await searchHeadToHead(player1NameValue, player2NameValue);
         
-        // For demonstration, we're using mock data that matches the schema
-        headToHeadMatches = [
-            {
-                id: 1,
-                player1_id: 1,
-                player2_id: 2,
-                tournament_id: 101,
-                event_id: 5,
-                player1_win: true,
-                match_result_concise: "-7, 8, 9, 9",
-                player1_rating: 2100,
-                player2_rating: 1950,
-                player1_name: "John Smith",
-                player2_name: "Sarah Johnson",
-                tournament_name: "Chicago Open",
-                tournament_start_date: "2023-05-15"
-            },
-            {
-                id: 2,
-                player1_id: 1,
-                player2_id: 2,
-                tournament_id: 102,
-                event_id: 6,
-                player1_win: false,
-                match_result_concise: "11, 7, 11, 8",
-                player1_rating: 2100,
-                player2_rating: 1950,
-                player1_name: "John Smith",
-                player2_name: "Sarah Johnson",
-                tournament_name: "Midwest Championships",
-                tournament_start_date: "2023-07-22"
-            },
-            {
-                id: 3,
-                player1_id: 1,
-                player2_id: 3,
-                tournament_id: 103,
-                event_id: 7,
-                player1_win: true,
-                match_result_concise: "11, 11, 10, 11",
-                player1_rating: 2100,
-                player2_rating: 2250,
-                player1_name: "John Smith",
-                player2_name: "Michael Chen",
-                tournament_name: "National Tournament",
-                tournament_start_date: "2023-09-10"
-            }
-        ];
+        // For demonstration purposes - this would come from your actual database
+        headToHeadMatches = [];
     } catch (error) {
         alert('Error retrieving match data from database');
         console.error('Match query error:', error);
@@ -338,7 +247,7 @@ function displayTournaments(matches) {
         const loserName = match.player1_win ? match.player2_name : match.player1_name;
         
         // Format the score to show as -7, 8, 9, 9 (as requested)
-        const score = match.match_result_concise;
+        const score = match.match_result_concise || "N/A";
         
         matchElement.innerHTML = `
             <div class="d-flex justify-content-between align-items-center">
@@ -358,9 +267,9 @@ function displayTournaments(matches) {
     });
 }
 
-// Initialize with some sample data for demonstration
+// Initialize with sample data for demonstration (this would be removed in real implementation)
 window.addEventListener('DOMContentLoaded', function() {
-    // Set up sample search for demonstration purposes
+    // Set up sample search for demonstration purposes (would be removed in production)
     player1Input.value = "John Smith";
     player2Input.value = "Sarah Johnson";
     
