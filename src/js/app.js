@@ -64,6 +64,8 @@ searchForm.addEventListener('submit', async function(e) {
         const headToHeadMatches = await makeApiCall(
             `/headtohead/${encodeURIComponent(player1NameValue)}/${encodeURIComponent(player2NameValue)}`
         );
+        
+        console.log('Received matches from API:', headToHeadMatches);
 
         // For demonstration purposes, we'll simulate getting player data
         // In real implementation, you'd get this from the database too
@@ -93,56 +95,67 @@ searchForm.addEventListener('submit', async function(e) {
 
 // Function to calculate statistics and display results
 function displayResults(player1, player2, matches) {
+    console.log('Displaying results for:', player1.name, 'vs', player2.name);
+    console.log('Matches count:', matches.length);
+    
     // Calculate stats for player 1 and player 2 correctly
-    // We need to properly identify which player won each match
     let player1WinsCount = 0;
     let player1LossesCount = 0;
     let player2WinsCount = 0;
     let player2LossesCount = 0;
     
     // Loop through all matches to count wins/losses properly
-    matches.forEach(match => {
-        if (match.player1_id === player1.id) {
-            // Player 1 is the first player in this match
-            if (match.player1_win === true) {
-                player1WinsCount++;
-            } else {
-                player1LossesCount++;
+    if (matches && matches.length > 0) {
+        matches.forEach((match, index) => {
+            console.log(`Match ${index + 1}:`, match);
+            
+            // Check if player1 is in this match and calculate accordingly
+            if (match.player1_id === player1.id) {
+                // Player 1 is the first player in this match
+                if (match.player1_win === true) {
+                    player1WinsCount++;
+                } else {
+                    player1LossesCount++;
+                }
+            } else if (match.player2_id === player1.id) {
+                // Player 1 is the second player in this match
+                if (match.player1_win === false) {
+                    player1WinsCount++;
+                } else {
+                    player1LossesCount++;
+                }
             }
-        } else if (match.player2_id === player1.id) {
-            // Player 1 is the second player in this match
-            if (match.player1_win === false) {
-                player1WinsCount++;
-            } else {
-                player1LossesCount++;
+            
+            // Check if player2 is in this match and calculate accordingly
+            if (match.player1_id === player2.id) {
+                // Player 2 is the first player in this match
+                if (match.player1_win === true) {
+                    player2WinsCount++;
+                } else {
+                    player2LossesCount++;
+                }
+            } else if (match.player2_id === player2.id) {
+                // Player 2 is the second player in this match
+                if (match.player1_win === false) {
+                    player2WinsCount++;
+                } else {
+                    player2LossesCount++;
+                }
             }
-        }
-        
-        if (match.player1_id === player2.id) {
-            // Player 2 is the first player in this match
-            if (match.player1_win === true) {
-                player2WinsCount++;
-            } else {
-                player2LossesCount++;
-            }
-        } else if (match.player2_id === player2.id) {
-            // Player 2 is the second player in this match
-            if (match.player1_win === false) {
-                player2WinsCount++;
-            } else {
-                player2LossesCount++;
-            }
-        }
-    });
+        });
+    }
     
     const player1TotalCount = player1WinsCount + player1LossesCount;
     const player2TotalCount = player2WinsCount + player2LossesCount;
+
+    console.log('Calculated stats - Player1:', { wins: player1WinsCount, losses: player1LossesCount, total: player1TotalCount });
+    console.log('Calculated stats - Player2:', { wins: player2WinsCount, losses: player2LossesCount, total: player2TotalCount });
 
     // Update the UI with player names
     player1Name.textContent = player1.name;
     player2Name.textContent = player2.name;
 
-    // Update match statistics
+    // Update match statistics - make sure we're setting all values
     player1Wins.textContent = player1WinsCount;
     player1Losses.textContent = player1LossesCount;
     player1Total.textContent = player1TotalCount;
@@ -166,7 +179,7 @@ function displayTournaments(matches) {
     // Clear previous content
     tournamentsContainer.innerHTML = '';
 
-    if (matches.length === 0) {
+    if (!matches || matches.length === 0) {
         tournamentsContainer.innerHTML = '<p class="text-muted">No matches found between these players.</p>';
         return;
     }
@@ -195,10 +208,14 @@ function displayTournaments(matches) {
             // Player 1 won
             winnerName = match.player1_name;
             loserName = match.player2_name;
-        } else {
-            // Player 2 won (or it's a tie, but we'll treat as player 2 win for consistency)
+        } else if (match.player1_win === false) {
+            // Player 2 won
             winnerName = match.player2_name;
             loserName = match.player1_name;
+        } else {
+            // Fallback - show as Player 1 won if we can't determine
+            winnerName = match.player1_name;
+            loserName = match.player2_name;
         }
 
         // Format the score to show as -7, 8, 9, 9 (as requested)
@@ -214,7 +231,7 @@ function displayTournaments(matches) {
                         <strong>${loserName}</strong>
                     </p>
                 </div>
-                <span class="badge bg-primary">${match.player1_win ? 'Player 1' : 'Player 2'} won</span>
+                <span class="badge bg-primary">${match.player1_win === true ? 'Player 1' : match.player1_win === false ? 'Player 2' : 'Unknown'} won</span>
             </div>
         `;
 
