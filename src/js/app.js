@@ -181,10 +181,11 @@ function displayTournaments(player1, player2, matches) {
 }
 
 // Initialize with sample data for demonstration
-window.addEventListener('DOMContentLoaded', function() {
+window.addEventListener('DOMContentLoaded', function() 
+{
     // Set up sample search for demonstration purposes (would be removed in production)
-    player1Input.value = "John Smith";
-    player2Input.value = "Sarah Johnson";
+    player1Input.value = "";
+    player2Input.value = "";
     
     // In a real implementation, you would not run this automatically
     // searchForm.dispatchEvent(new Event('submit'));
