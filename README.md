@@ -1,6 +1,6 @@
 # USATT Head-to-Head Search
 
-A full-stack web application that allows users to search for head-to-head match records between two USATT players. The application provides a clear comparison of results and a detailed tournament history.
+A full-stack web application that allows users to search for head-to-head match records between two USATT players on Omnipong. The application provides a clear comparison of results and a detailed tournament history.
 
 ## Project Structure
 
@@ -20,9 +20,8 @@ head2head/
 
 ## Features
 
-- **Head-to-Head Comparison**: Search for two players to see their lifetime record against each other.
-- **Score-Based Results**: View results in a clear "Scoreboard" format (e.g., 7 - 1) instead of cluttered statistics.
-- **Dynamic Attribution**: Wins are accurately attributed to the players as entered in the search fields.
+- **Head-to-Head Comparison**: Search for two players to see their lifetime record against each other (ONLY ON OMNIPONG).
+- **Score-Based Results**: View results in a clear Scoreboard format.
 - **Tournament History**: Detailed list of every match played, including the event name, date, and game scores.
 - **Responsive Design**: Built with Bootstrap 5 to work seamlessly across desktop and mobile devices.
 
@@ -69,7 +68,3 @@ head2head/
 - `GET /api/headtohead/:player1/:player2`: Retrieves all matches between two players.
 - `GET /api/players`: Retrieves a list of all players in the database.
 - `GET /api/player/:name`: Retrieves details for a specific player by name.
-
-## License
-
-MIT
