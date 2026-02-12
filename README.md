@@ -1,60 +1,74 @@
 # USATT Head-to-Head Search
 
-A web application that allows users to search for head-to-head match records between two USATT players using the JustGo API.
+A full-stack web application that allows users to search for head-to-head match records between two USATT players. The application provides a clear comparison of results and a detailed tournament history.
 
 ## Project Structure
 
 ```
 head2head/
-├── src/
-│   ├── index.html
+├── src/               # Frontend assets
+│   ├── index.html     # Main UI
 │   ├── css/
-│   │   └── styles.css
+│   │   └── styles.css # Custom styling
 │   └── js/
-│       └── app.js
-├── package.json
+│       └── app.js     # Frontend logic
+├── server.js          # Express server & API
+├── package.json       # Dependencies and scripts
+├── .env               # Environment variables (DB config)
 └── README.md
 ```
 
 ## Features
 
-- Search for head-to-head records between two USATT players
-- View match statistics (wins, losses, total matches)
-- See tournament history with scores and dates
-- Responsive design that works on desktop and mobile devices
+- **Head-to-Head Comparison**: Search for two players to see their lifetime record against each other.
+- **Score-Based Results**: View results in a clear "Scoreboard" format (e.g., 7 - 1) instead of cluttered statistics.
+- **Dynamic Attribution**: Wins are accurately attributed to the players as entered in the search fields.
+- **Tournament History**: Detailed list of every match played, including the event name, date, and game scores.
+- **Responsive Design**: Built with Bootstrap 5 to work seamlessly across desktop and mobile devices.
 
-## How to Use
+## Technical Stack
 
-1. Open your browser and navigate to `http://localhost:8000`
-2. Enter the names of two different USATT players
-3. Click "Search Head-to-Head"
-4. View the match statistics and tournament history
+- **Frontend**: HTML5, CSS3, JavaScript (ES6+), Bootstrap 5, Font Awesome.
+- **Backend**: Node.js, Express.js.
+- **Database**: PostgreSQL for storing player, match, and tournament data.
+- **Environment**: Dotenv for secure configuration.
 
-## Development
+## Setup and Installation
 
-To run this application locally:
+### Prerequisites
 
-1. Clone the repository
-2. Install dependencies: `npm install`
-3. Start the development server: `npm start`
+- Node.js (v14 or higher)
+- PostgreSQL database
 
-## Technical Details
+### Configuration
 
-This application uses:
-- HTML5, CSS3, and JavaScript for the frontend
-- Bootstrap 5 for responsive styling
-- Font Awesome for icons
-- JustGo API for player data (via the api.justgo.com endpoint)
+1. Create a `.env` file in the root directory with your database credentials:
+   ```env
+   DB_HOST=your_host
+   DB_PORT=5432
+   DB_NAME=your_db_name
+   DB_USER=your_user
+   DB_PASSWORD=your_password
+   SERVER_PORT=3000
+   ```
 
-## API Integration
+### Running the App
 
-The application is designed to integrate with the JustGo API endpoint at `https://api.justgo.com/index.html`. The actual API implementation would need to be configured with appropriate authentication and endpoint calls.
+1. Install dependencies:
+   ```bash
+   npm install
+   ```
+2. Start the server:
+   ```bash
+   npm start
+   ```
+3. Open your browser and navigate to `http://localhost:3000`
 
-## Files
+## API Endpoints
 
-- `src/index.html` - Main application interface
-- `src/css/styles.css` - Custom styling
-- `src/js/app.js` - JavaScript functionality and API integration
+- `GET /api/headtohead/:player1/:player2`: Retrieves all matches between two players.
+- `GET /api/players`: Retrieves a list of all players in the database.
+- `GET /api/player/:name`: Retrieves details for a specific player by name.
 
 ## License
 
